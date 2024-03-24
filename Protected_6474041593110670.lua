@@ -465,51 +465,6 @@ end)
 Dupees:AddToggle('DupeRollback', {Text = 'Stop Saving Data',Default = false, Tooltip = "Stop saving data (meaning your data wont be saved when this is toggled)" })
 Dupees:AddLabel('Guide on how to dupe:\n\n1.) Turn on "Stop Saving Data"\n\n2.) Drop your items to someone\n(you have a short time window to do this or else the rollback may not work..)\n\n3.) Have the account pick it up\n\n4.) Click rejoin server\n\nWait a bit after toggling off to save data.', true)
 
--- Create the dropdowns for each category
-Tabs.Teleports:AddLeftGroupbox('Spawns'):AddDropdown('SpawnsDropdown', {
-    Text = 'Select a spawn teleport',
-    Tooltip = 'Choose a spawn teleport destination',
-    Values = spawnsTeleports,
-    AllowNull = true,
-    Callback = function(Value)
-        local teleportName = Value
-        if teleportName then
-            -- Retrieve the CFrame for the selected spawn teleport based on its name
-            local selectedTeleportCFrame = workspace.Spawns:FindFirstChild(teleportName)
-            TeleportToSelectedTeleport(selectedTeleportCFrame and selectedTeleportCFrame.CFrame)
-        end
-    end
-})
-
-local Collect = Tabs.Teleport:AddRightTabbox('Auto Collect')
-local AutoCollectSpawn = Collect:AddTab('Spawned Items')
-local AutoCollectDrop = Collect:AddTab('Dropped Items')
-AutoCollectSpawn:AddToggle('lcsi2', {Text = 'Loop Collect Spawned Items', Default = false, Tooltip = "Automatically gather spawnable items like flowers."})
-AutoCollectSpawn:AddToggle('lcsiServerHop', {Text = 'Server Hop after Collecting', Default = false, Tooltip = "Automatically server hop after doing a loop of collecting all spawned items."})
-AutoCollectDrop:AddToggle('lcdi', {Text = 'Loop Collect Dropped Items', Default = false, Tooltip = "Automatically pick up dropped loot like bags.\nez scams"})
-AutoCollectDrop:AddToggle('lcdinear', {Text = 'Loop Collect Near Dropped Items', Default = false, Tooltip = "Automatically pick up dropped loot like bags near your player.\nThis does not use teleporting.\nez scams"})
-AutoCollectSpawn:AddButton('Collect Spawned Items', function()
-    local save = player.Character.HumanoidRootPart.CFrame
-    pickingUpFlowers = true
-    for _,v in pairs(workspace.SpawnedItems:GetDescendants()) do
-        if v.ClassName == "ClickDetector" then
-            local clickPart = v.Parent
-            if clickPart then
-                repeat task.wait()
-                    player.Character.HumanoidRootPart.CFrame = clickPart.CFrame + Vector3.new(0,-14,0)
-                    fireclickdetector(v, 1)
-                until not v:IsDescendantOf(workspace)
-            end
-        end
-    end
-    player.Character.HumanoidRootPart.CFrame = save
-    task.spawn(function()
-        task.wait(2)
-        pickingUpFlowers = false
-    end)
-end, {Tooltip = "One-time collect of current spawnable items."})
-AutoCollectDrop:AddButton('Collect Dropped Items', collectDroppedItems, {Tooltip = "One-time collect of current dropped items."})
-
 ThemeManager:SetLibrary(Library)
 SaveManager:SetLibrary(Library)
 UniversalBuilder:SetLibrary(Library)
