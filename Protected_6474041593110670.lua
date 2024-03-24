@@ -1372,8 +1372,12 @@ local Window = Library:CreateWindow({
 })
 
 local Tabs = {
-    Dupe = Window:AddTab('Rollback'),
-	Teleports = Window:AddTab('Teleports'),
+    Main = Window:AddTab('Main'),
+    Teleports = Window:AddTab('Teleports'),
+    Dupe = Window:AddTab('Dupe/Rollback'),
+    Logs = Window:AddTab('Logs'),
+    Universal = Window:AddTab('Universal'),
+    ['UI Settings'] = Window:AddTab('UI Settings'),
 }
 
 local LogsBox = Tabs.Logs:AddLeftGroupbox('Logs')
