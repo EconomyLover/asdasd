@@ -465,6 +465,82 @@ end)
 Dupees:AddToggle('DupeRollback', {Text = 'Stop Saving Data',Default = false, Tooltip = "Stop saving data (meaning your data wont be saved when this is toggled)" })
 Dupees:AddLabel('Guide on how to dupe:\n\n1.) Turn on "Stop Saving Data"\n\n2.) Drop your items to someone\n(you have a short time window to do this or else the rollback may not work..)\n\n3.) Have the account pick it up\n\n4.) Click rejoin server\n\nWait a bit after toggling off to save data.', true)
 
+-- Create the dropdowns for each category
+Tabs.Teleports:AddLeftGroupbox('Spawns'):AddDropdown('SpawnsDropdown', {
+    Text = 'Select a spawn teleport',
+    Tooltip = 'Choose a spawn teleport destination',
+    Values = spawnsTeleports,
+    AllowNull = true,
+    Callback = function(Value)
+        local teleportName = Value
+        if teleportName then
+            -- Retrieve the CFrame for the selected spawn teleport based on its name
+            local selectedTeleportCFrame = workspace.Spawns:FindFirstChild(teleportName)
+            TeleportToSelectedTeleport(selectedTeleportCFrame and selectedTeleportCFrame.CFrame)
+        end
+    end
+})
+
+Tabs.Teleports:AddRightGroupbox('Buyables'):AddDropdown('BuyablesDropdown', {
+    Text = 'Select a buyable teleport',
+    Tooltip = 'Choose a buyable teleport destination',
+    Values = buyablesTeleports,
+    AllowNull = true,
+    Callback = function(Value)
+        local teleportName = Value
+        if teleportName then
+            -- Retrieve the CFrame for the selected buyable teleport based on its name
+            local selectedTeleportCFrame = workspace.Buyables:FindFirstChild(teleportName)
+            TeleportToSelectedTeleport(selectedTeleportCFrame and selectedTeleportCFrame:GetPivot())
+        end
+    end
+})
+
+Tabs.Teleports:AddRightGroupbox('NPCs'):AddDropdown('NPCDropdown', {
+    Text = 'Select an npc teleport',
+    Tooltip = 'Choose an npc teleport destination',
+    Values = npcTeleports,
+    AllowNull = true,
+    Callback = function(Value)
+        local teleportName = Value
+        if teleportName then
+        -- Retrieve the CFrame for the selected encounter teleport based on its name
+        local selectedTeleportCFrame = workspace.NPCs:FindFirstChild(teleportName)
+        TeleportToSelectedTeleport(selectedTeleportCFrame and selectedTeleportCFrame:GetPivot())
+        end
+    end
+})
+
+Tabs.Teleports:AddLeftGroupbox('Quest NPCs'):AddDropdown('QuestNPCDropdown', {
+    Text = 'Select an quest npc teleport',
+    Tooltip = 'Choose an quest npc teleport destination',
+    Values = questNPCTeleports,
+    AllowNull = true,
+    Callback = function(Value)
+        local teleportName = Value
+        -- Retrieve the CFrame for the selected encounter teleport based on its name
+        if teleportName then
+        local selectedTeleportCFrame = workspace.NPCs.Quest:FindFirstChild(teleportName)
+        TeleportToSelectedTeleport(selectedTeleportCFrame and selectedTeleportCFrame:GetPivot())
+        end
+    end
+})
+
+local OtherTP = Tabs.Teleports:AddLeftGroupbox('Other Teleports')
+OtherTP:AddButton('Momma Darkbeast', function()
+    player.Character.HumanoidRootPart.CFrame = workspace.NPCs["Momma Darkbeast"].HumanoidRootPart.CFrame
+end)
+OtherTP:AddButton('Cursed Gate/Puzzle', function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(2343.709228515625, 24.33362579345703, -435.2521667480469)
+end)
+OtherTP:AddButton('Yarthul Gate', function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-5043.93310546875, 51.526851654052734, -3129.505859375)
+end)
+
+OtherTP:AddButton('Arena (end of parkour)', function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(2331.618896484375, 7.460083484649658, 533.8240356445312)
+end)
+
 ThemeManager:SetLibrary(Library)
 SaveManager:SetLibrary(Library)
 UniversalBuilder:SetLibrary(Library)
