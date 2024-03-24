@@ -1549,6 +1549,8 @@ local function GetUniqueToolNames()
 
     return uniqueToolNames
 end
+Library.ToggleKeybind = Options.MenuKeybind
+Library.KeybindFrame.Visible = false
 
 ThemeManager:SetLibrary(Library)
 SaveManager:SetLibrary(Library)
