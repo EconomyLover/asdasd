@@ -1373,6 +1373,7 @@ local Window = Library:CreateWindow({
 
 local Tabs = {
     Dupe = Window:AddTab('Rollback'),
+	Teleports = Window:AddTab('Teleports'),
 }
 
 local LogsBox = Tabs.Logs:AddLeftGroupbox('Logs')
@@ -1453,18 +1454,20 @@ Tabs.Teleports:AddLeftGroupbox('Quest NPCs'):AddDropdown('QuestNPCDropdown', {
     end
 })
 
-OtherTP:AddButton('Meditate', function()
-    player.Character.HumanoidRootPart.CFrame = CFrame.new(-246.974853515625, 42.98745346069336, -3351.39501953125)
+local OtherTP = Tabs.Teleports:AddLeftGroupbox('Other Teleports')
+OtherTP:AddButton('Momma Darkbeast', function()
+    player.Character.HumanoidRootPart.CFrame = workspace.NPCs["Momma Darkbeast"].HumanoidRootPart.CFrame
 end)
-OtherTP:AddButton('Shard Shop', function()
-    player.Character.HumanoidRootPart.CFrame = CFrame.new(-384.1550598144531, 43.49483108520508, -3389.0068359375)
+OtherTP:AddButton('Cursed Gate/Puzzle', function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(2343.709228515625, 24.33362579345703, -435.2521667480469)
 end)
-
 OtherTP:AddButton('Yarthul Gate', function()
     player.Character.HumanoidRootPart.CFrame = CFrame.new(-5043.93310546875, 51.526851654052734, -3129.505859375)
 end)
 
-
+OtherTP:AddButton('Arena (end of parkour)', function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(2331.618896484375, 7.460083484649658, 533.8240356445312)
+end)
 
 local AutoAttack = Tabs.Main:AddLeftTabbox('Encounters')
 local EFeatures = AutoAttack:AddTab('Encounters')
