@@ -1373,7 +1373,7 @@ local Window = Library:CreateWindow({
 
 local Tabs = {
     Teleports = Window:AddTab('Teleports'),
-    Dupe = Window:AddTab('Rollback'),
+    Dupe = Window:AddTab('Dupe/Rollback'),
 }
 
 local LogsBox = Tabs.Logs:AddLeftGroupbox('Logs')
