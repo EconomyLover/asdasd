@@ -1374,6 +1374,9 @@ local Window = Library:CreateWindow({
 local Tabs = {
     Teleports = Window:AddTab('Teleports'),
     Dupe = Window:AddTab('Dupe/Rollback'),
+	Gayshit = Window:AddTab('Gayshit'),
+
+
 }
 
 local LogsBox = Tabs.Logs:AddLeftGroupbox('Logs')
@@ -1469,97 +1472,10 @@ OtherTP:AddButton('Arena (end of parkour)', function()
     player.Character.HumanoidRootPart.CFrame = CFrame.new(2331.618896484375, 7.460083484649658, 533.8240356445312)
 end)
 
-local AutoAttack = Tabs.Main:AddLeftTabbox('Encounters')
-local EFeatures = AutoAttack:AddTab('Encounters')
-local SelectSkills = AutoAttack:AddTab('Select Skills')
-EFeatures:AddToggle('AutoAttack', {Text = 'Auto Attack',Default = false, Tooltip = "Automatically attack (using skills) in encounters.\nSelect skills in the 'Select Skills' tab." })
-EFeatures:AddDropdown('AttackMethod', {Values = {"weakest", "strongest", "random", "one_at_a_time"}, Multi = false, AllowNull = false, Default = 1, Text = 'Select attack target priority'})
-EFeatures:AddToggle('AutoEscape', {Text = 'Auto Escape',Default = false, Tooltip = "Automatically tries to escape in encounters."})
---EFeatures:AddToggle('InfMeditate', {Text = 'Infinite Energy',Default = false, Tooltip = "Get 6 full energy bars almost instantly before attacking.\nTHIS DOES LOWER YOUR GUARD BY ALOT AND MAY GET U 1 SHOTTED!"})
-local attackLabels = {} -- Store labels for each attack
-
-for i, attack in ipairs(Attacks) do
-    local label
-    local is_self_target = IsSelfTargetSkill(attack)
-    local toggle = SelectSkills:AddToggle('AutoAttack' .. i, {
-        Text = (is_self_target and (attack .. " [self]") or attack),
-        Default = false,
-        Tooltip = (is_self_target and "This will be casted on yourself." or "This will be casted on enemies."),
-        Callback = function(value)
-            -- Update the AttackSelectorInstance when a toggle is clicked
-            if value then
-                AttackSelectorInstance:AddAttack(i)
-            else
-                AttackSelectorInstance:RemoveAttack(i)
-            end
-
-            -- Update the label display to show or hide the priority number
-            local priority = getAttackPriority(i)
-            label:SetText(value and ('[Priority %d] %s'):format(priority, attack) or "no priority..")
-        end
-    })
-    label = SelectSkills:AddLabel('')
-    -- Set initial label text
-    local priority = getAttackPriority(i)
-    label:SetText(toggle.Value and ('[Priority %d] %s'):format(priority, attack) or "no priority..")
-
-    table.insert(attackLabels, label)
-end
-
-local Level = Tabs.Main:AddLeftGroupbox('Auto Level')
-Level:AddToggle('AutoStatAllocate', {Text = 'Auto Level Up after Fight', Default = false, Tooltip = "Attempt to auto lvl up and allocate stats after you finish a fight\nand collect the essence."})
-Level:AddButton('Level Up', function() 
-    allocateStats()
-end)
-Level:AddSlider('physicalSelector', {Text = 'Stat Allocation: Physical', Default = 0, Min = 0, Max = 3, Rounding = 0, Compact = true})
-Level:AddSlider('arcaneSelector', {Text = 'Stat Allocation: Arcane', Default = 0, Min = 0, Max = 3, Rounding = 0, Compact = true})
-Level:AddSlider('enduranceSelector', {Text = 'Stat Allocation: Endurance', Default = 0, Min = 0, Max = 3, Rounding = 0, Compact = true})
-Level:AddSlider('speedSelector', {Text = 'Stat Allocation: Speed', Default = 0, Min = 0, Max = 3, Rounding = 0, Compact = true})
-Level:AddSlider('luckSelector', {Text = 'Stat Allocation: Luck', Default = 0, Min = 0, Max = 3, Rounding = 0, Compact = true})
-
-local QTE = Tabs.Main:AddLeftTabbox('Auto Dodge')
-local QTE1 = QTE:AddTab('Auto Dodge')
-QTE1:AddToggle('AutoDodge', {Text = 'Auto Instant Dodge', Default = false, Tooltip = "Automatically and instantly perform Dodges."})
-QTE1:AddToggle('AutoDodgeLegit', {Text = 'Auto Legit Dodge', Default = false, Tooltip = "Automatically perform delayed Dodges."})
-QTE1:AddSlider('DodgeLegitMin', {Text = 'Legit Dodge: Min Delay', Default = 0.4, Min = 0.1, Max = 1, Rounding = 1, Compact = false})
-QTE1:AddSlider('DodgeLegitMax', {Text = 'Legit Dodge: Max Delay', Default = 0.7, Min = 0.1, Max = 1, Rounding = 1, Compact = false})
-
-local QTE2 = QTE:AddTab('Auto QTE')
-QTE2:AddToggle('AutoQTE', {Text = 'Auto Instant QTE (minigame)', Default = false, Tooltip = "Automatically and instantly perform Quick Time Events (QTEs)."})
-QTE2:AddToggle('AutoQTELegit', {Text = 'Auto Legit QTE (minigame)', Default = false, Tooltip = "Automatically perform delayed Quick Time Events (QTEs)."})
-QTE2:AddSlider('LegitMin', {Text = 'Legit QTE: Min Delay (seconds)', Default = 4, Min = 1, Max = 10, Rounding = 0, Compact = false})
-QTE2:AddSlider('LegitMax', {Text = 'Legit QTE: Max Delay (seconds)', Default = 6, Min = 1, Max = 10, Rounding = 0, Compact = false})
-
-local Misc = Tabs.Main:AddLeftGroupbox('Misc Features')
-Misc:AddToggle('NoFall', {Text = 'No Fall', Default = false, Tooltip = "Prevent falling damage."})
-Misc:AddToggle('InfEnergy', {Text = 'Spam Meditate', Default = false, Tooltip = "THIS DOES LOWER UR GUARD AND MAY GET U 1 SHOTTED!\nTHIS DOES LOWER UR GUARD AND MAY GET U 1 SHOTTED!\nTHIS DOES LOWER UR GUARD AND MAY GET U 1 SHOTTED!\nTHIS DOES LOWER UR GUARD AND MAY GET U 1 SHOTTED!\nTHIS DOES LOWER UR GUARD AND MAY GET U 1 SHOTTED!\nTHIS DOES LOWER UR GUARD AND MAY GET U 1 SHOTTED!\n"})
---Misc:AddToggle('InfGuard', {Text = 'Infinite Guard', Default = false})
-Misc:AddToggle('AutoHeal', {Text = 'Auto Heal (doctor)', Default = false, Tooltip = "Auto Heal using the doctor."})
-Misc:AddToggle('KillBrick', {Text = 'No Kill Bricks', Default = false, Tooltip = "You won't die to void, geysers, fireballs, fallers\nYou can still die to fires in the blacksmithes", Callback = function(v)
-    if v then
-        for _,obj in pairs(workspace:GetDescendants()) do
-            if obj:IsA("TouchTransmitter") then
-                local parentName = obj.Parent.Name
-                if parentName == "Void" or parentName == "Fireball" 
-                or parentName == "Faller" or parentName == "Geyser" then
-
-                    obj:Destroy()
-                elseif (obj.Parent and obj.Parent.BrickColor and (obj.Parent.BrickColor == BrickColor.new("Really black") or obj.Parent.BrickColor == BrickColor.new("Bright red"))) then 
-                    obj:Destroy()
-                end
-            end
-        end
-    end
-end})
-Misc:AddButton('Doctor Heal', function()
-doctorHeal()
-end)
-
-local Collect = Tabs.Main:AddRightTabbox('Auto Collect')
+local Collect = Tabs.Gayshit:AddRightTabbox('Auto Collect')
 local AutoCollectSpawn = Collect:AddTab('Spawned Items')
 local AutoCollectDrop = Collect:AddTab('Dropped Items')
 AutoCollectSpawn:AddToggle('lcsi2', {Text = 'Loop Collect Spawned Items', Default = false, Tooltip = "Automatically gather spawnable items like flowers."})
-AutoCollectSpawn:AddToggle('lcsiUseElixir', {Text = 'Auto Abhorrent Elixir', Default = false, Tooltip = "Automatically use Abhorrent Elixir.\n(it will also craft an Abhorrent Elixir if you don't have one)"})
 AutoCollectSpawn:AddToggle('lcsiServerHop', {Text = 'Server Hop after Collecting', Default = false, Tooltip = "Automatically server hop after doing a loop of collecting all spawned items."})
 AutoCollectDrop:AddToggle('lcdi', {Text = 'Loop Collect Dropped Items', Default = false, Tooltip = "Automatically pick up dropped loot like bags.\nez scams"})
 AutoCollectDrop:AddToggle('lcdinear', {Text = 'Loop Collect Near Dropped Items', Default = false, Tooltip = "Automatically pick up dropped loot like bags near your player.\nThis does not use teleporting.\nez scams"})
@@ -1586,17 +1502,7 @@ end, {Tooltip = "One-time collect of current spawnable items."})
 AutoCollectDrop:AddButton('Collect Dropped Items', collectDroppedItems, {Tooltip = "One-time collect of current dropped items."})
 
 
-
-local Potion = Tabs.Main:AddRightTabbox('Auto Potion')
-local Craft = Potion:AddTab('Auto Craft')
-local Use = Potion:AddTab('Auto Use')
-Craft:AddToggle('AutoBrewPotion', {Text = 'Auto Brew Potions', Default = false, Tooltip = "Automatically brew potions."})
-Craft:AddDropdown('SelectPotion', {Values = getAllPotionNames(), Multi = false, AllowNull = false, Default = 1, Text = 'Select Potion to Brew'})
-
-Use:AddToggle('Alluring', {Text = 'Auto Use Alluring', Default = false})
-Use:AddLabel("more coming soon..")
-
-local Merchant = Tabs.Main:AddRightGroupbox('Auto Merchant')
+local Merchant = Tabs.Gayshit:AddLeftGroupbox('Auto Merchant')
 Merchant:AddToggle('MerchantNotifier', {Text = 'Mysterious Merchant Notifier', Default = false, Tooltip = "Get notified when the mysterious merchant spawns."})
 Merchant:AddToggle('MerchantHopper', {Text = 'Server Hop Until Merchant', Default = false, Tooltip = "Server Hops until there is a merchant in your lobby."})
 Merchant:AddButton('Teleport to Merchant', function()
@@ -1643,28 +1549,6 @@ local function GetUniqueToolNames()
 
     return uniqueToolNames
 end
-local Drop = Tabs.Main:AddRightGroupbox('Auto Drop')
-Drop:AddToggle('AutoDrop', {Text = 'Auto Drop Item', Default = false, Tooltip = "Automatically drops selected item from your inventory."})
-local dropdd = Drop:AddDropdown('DropItem', {Values = GetUniqueToolNames(), Multi = false, AllowNull = true, Text = 'Select Item to Drop'})
-Drop:AddButton('Refresh Item List', function()
-    dropdd:SetValues(GetUniqueToolNames())
-end)
-task.spawn(LPH_JIT_MAX(function()
-    while task.wait() do
-        if Toggles.AutoDrop.Value then
-            ReplicatedStorage.Remotes.Information.InventoryManage:FireServer("Drop", Options.DropItem.Value)
-        end
-    end
-end))
-local Mine = Tabs.Main:AddRightGroupbox('Mines')
-Mine:AddToggle('AutoMineOre', {Text = 'Auto Mine Ore', Default = false, Tooltip = "Automatically mine ores in the game.\nYou must have a pickaxe in your inventory!"})
-Mine:AddDropdown('SelectMine', {Values = {"Aestic", "Ferrus", "Laneus"}, Multi = true, AllowNull = false, Default = 1, Text = 'Select Ore to Mine'})
-local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
-MenuGroup:AddButton('Unload', function() Library:Unload() end)
-MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = 'End', NoUI = true, Text = 'Menu keybind' })
-MenuGroup:AddToggle('KeybindUI', {Text = 'Show Keybind UI', Default = false, Callback = function(v) Library.KeybindFrame.Visible = v end})
-Library.ToggleKeybind = Options.MenuKeybind
-Library.KeybindFrame.Visible = false
 
 ThemeManager:SetLibrary(Library)
 SaveManager:SetLibrary(Library)
