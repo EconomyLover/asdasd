@@ -1389,7 +1389,7 @@ Dupees:AddLabel('How to dupe:\n\n1.) Turn on "Stop Saving Data"\n\n2.) Drop your
 
 -- Create the dropdowns for each category
 Tabs.Teleports:AddLeftGroupbox('Spawns'):AddDropdown('SpawnsDropdown', {
-    Text = 'Select a spawn teleport',
+    Text = 'Select a spawn teleport ( If the TPs arent showing its cause your on mobile and they havent loaded in',
     Tooltip = 'Choose a spawn teleport destination',
     Values = spawnsTeleports,
     AllowNull = true,
@@ -1460,10 +1460,9 @@ local Collect = Tabs.Update:AddRightTabbox('Auto Collect')
 local AutoCollectSpawn = Collect:AddTab('Spawned Items')
 local AutoCollectDrop = Collect:AddTab('Dropped Items')
 AutoCollectSpawn:AddToggle('lcsi2', {Text = 'Loop Collect Spawned Items', Default = false, Tooltip = "Automatically gather spawnable items like flowers."})
-AutoCollectSpawn:AddToggle('lcsiUseElixir', {Text = 'Auto Abhorrent Elixir', Default = false, Tooltip = "Automatically use Abhorrent Elixir.\n(it will also craft an Abhorrent Elixir if you don't have one)"})
 AutoCollectSpawn:AddToggle('lcsiServerHop', {Text = 'Server Hop after Collecting', Default = false, Tooltip = "Automatically server hop after doing a loop of collecting all spawned items."})
 AutoCollectDrop:AddToggle('lcdi', {Text = 'Loop Collect Dropped Items', Default = false, Tooltip = "Automatically pick up dropped loot like bags.\nez scams"})
-AutoCollectDrop:AddToggle('lcdinear', {Text = 'Loop Collect Near Dropped Items', Default = false, Tooltip = "Automatically pick up dropped loot like bags near your player.\nThis does not use teleporting.\nez scams"})
+AutoCollectDrop:AddToggle('lcdinear', {Text = 'Loop Collect Near Dropped Items', Default = false, Tooltip = "Automatically pick up dropped loot bags near your player.\nez scams"})
 AutoCollectSpawn:AddButton('Collect Spawned Items', function()
     local save = player.Character.HumanoidRootPart.CFrame
     pickingUpFlowers = true
@@ -1485,17 +1484,6 @@ AutoCollectSpawn:AddButton('Collect Spawned Items', function()
     end)
 end, {Tooltip = "One-time collect of current spawnable items."})
 AutoCollectDrop:AddButton('Collect Dropped Items', collectDroppedItems, {Tooltip = "One-time collect of current dropped items."})
-
-
-
-local Potion = Tabs.Main:AddRightTabbox('Auto Potion')
-local Craft = Potion:AddTab('Auto Craft')
-local Use = Potion:AddTab('Auto Use')
-Craft:AddToggle('AutoBrewPotion', {Text = 'Auto Brew Potions', Default = false, Tooltip = "Automatically brew potions."})
-Craft:AddDropdown('SelectPotion', {Values = getAllPotionNames(), Multi = false, AllowNull = false, Default = 1, Text = 'Select Potion to Brew'})
-
-Use:AddToggle('Alluring', {Text = 'Auto Use Alluring', Default = false})
-Use:AddLabel("more coming soon..")
 
 local Merchant = Tabs.Update:AddLeftGroupbox('Auto Merchant')
 Merchant:AddToggle('MerchantNotifier', {Text = 'Mysterious Merchant Notifier', Default = false, Tooltip = "Get notified when the mysterious merchant spawns."})
