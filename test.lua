@@ -1384,7 +1384,7 @@ Rejoins:AddButton('Rejoin Server', function()
     game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-Dupees:AddToggle('DupeRollback', {Text = 'Stop Saving Data',Default = false, Tooltip = "Stop saving data (meaning your data wont be saved when this is toggled)" })
+Dupees:AddToggle('DupeRollback', {Text = 'Stop Saving Data',Default = false, Tooltip = "Your data wont be saved when this is toggled" })
 Dupees:AddLabel('How to dupe:\n\n1.) Turn on "Stop Saving Data"\n\n2.) Drop your items to ALT an Account\n(you have a short time window to do this or else the rollback may not work..)\n\n3.) Have the account pick it up\n\n4.) Click rejoin server\n\nWait a bit after toggling off to save data.', true)
 
 -- Create the dropdowns for each category
@@ -1399,21 +1399,6 @@ Tabs.Teleports:AddLeftGroupbox('Spawns'):AddDropdown('SpawnsDropdown', {
             -- Retrieve the CFrame for the selected spawn teleport based on its name
             local selectedTeleportCFrame = workspace.Spawns:FindFirstChild(teleportName)
             TeleportToSelectedTeleport(selectedTeleportCFrame and selectedTeleportCFrame.CFrame)
-        end
-    end
-})
-
-Tabs.Teleports:AddRightGroupbox('Buyables'):AddDropdown('BuyablesDropdown', {
-    Text = 'Select a buyable teleport',
-    Tooltip = 'Choose a buyable teleport destination',
-    Values = buyablesTeleports,
-    AllowNull = true,
-    Callback = function(Value)
-        local teleportName = Value
-        if teleportName then
-            -- Retrieve the CFrame for the selected buyable teleport based on its name
-            local selectedTeleportCFrame = workspace.Buyables:FindFirstChild(teleportName)
-            TeleportToSelectedTeleport(selectedTeleportCFrame and selectedTeleportCFrame:GetPivot())
         end
     end
 })
@@ -1447,6 +1432,7 @@ Tabs.Teleports:AddLeftGroupbox('Quest NPCs'):AddDropdown('QuestNPCDropdown', {
         end
     end
 })
+
 local OtherTP = Tabs.Teleports:AddLeftGroupbox('Other Teleports')
 OtherTP:AddButton('Meditate', function()
     player.Character.HumanoidRootPart.CFrame = CFrame.new(-246.974853515625, 42.98745346069336, -3351.39501953125)
